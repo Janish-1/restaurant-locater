@@ -3,7 +3,7 @@ const Restaurant = require("../models/Restaurant");
 // Create a new restaurant
 const createRestaurant = async (req, res) => {
   try {
-    const { name, description, latitude, longitude } = req.body;
+    const { name, description, latitude, longitude, ratings } = req.body;
 
     const newRestaurant = new Restaurant({
       name,
@@ -12,6 +12,7 @@ const createRestaurant = async (req, res) => {
         type: "Point",
         coordinates: [longitude, latitude],
       },
+      ratings: ratings || [], // Ensure ratings are included
     });
 
     await newRestaurant.save();
@@ -33,9 +34,30 @@ const getRestaurantsByRadius = async (req, res) => {
         },
       },
     });
+    // Transform the restaurant data to include average rating and number of ratings
+    const transformedRestaurants = restaurants.map((restaurant) => {
+      const { name, description, location, ratings } = restaurant;
 
-    res.status(200).json(restaurants);
-  } catch (error) {
+      // Compute average rating and number of ratings
+      const averageRating = ratings.length > 0
+        ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+        : 0;
+      const numberOfRatings = ratings.length;
+
+      return {
+        name,
+        description,
+        location: {
+          latitude: location.coordinates[1],
+          longitude: location.coordinates[0],
+        },
+        averageRating,
+        numberOfRatings,
+      };
+    });
+
+    res.status(200).json(transformedRestaurants);
+    } catch (error) {
     res.status(500).json({ message: "Error retrieving restaurants", error });
   }
 };
@@ -58,21 +80,50 @@ const getRestaurantsByDistanceRange = async (req, res) => {
       },
     });
 
-    res.status(200).json(restaurants);
-  } catch (error) {
+    // Transform the restaurant data to include average rating and number of ratings
+    const transformedRestaurants = restaurants.map((restaurant) => {
+      const { name, description, location, ratings } = restaurant;
+
+      // Compute average rating and number of ratings
+      const averageRating = ratings.length > 0
+        ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+        : 0;
+      const numberOfRatings = ratings.length;
+
+      return {
+        name,
+        description,
+        location: {
+          latitude: location.coordinates[1],
+          longitude: location.coordinates[0],
+        },
+        averageRating,
+        numberOfRatings,
+      };
+    });
+
+    res.status(200).json(transformedRestaurants);
+    } catch (error) {
     res.status(500).json({ message: "Error retrieving restaurants", error });
   }
 };
 
-// Update a restaurant
 const updateRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
-    const updateData = req.body;
+    const { name, description, latitude, longitude, ratings } = req.body;
 
     const updatedRestaurant = await Restaurant.findByIdAndUpdate(
       restaurantId,
-      updateData,
+      {
+        name,
+        description,
+        location: {
+          type: "Point",
+          coordinates: [longitude, latitude],
+        },
+        ratings: ratings || [], // Ensure ratings are updated
+      },
       { new: true }
     );
 
