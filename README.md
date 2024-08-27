@@ -101,20 +101,14 @@ Setup and Installation
 
     Clone the Repository:
 
-    sh
-
 git clone https://github.com/Janish-1/restaurant-locater.git
 cd restaurant-locater
 
 Install Dependencies:
 
-sh
-
 npm install
 
 Run the Application:
-
-sh
 
 npm start
 
@@ -122,13 +116,9 @@ Docker Setup:
 
     Build Docker Image:
 
-    sh
-
 docker build -t restaurant-locater .
 
 Run Docker Container:
-
-sh
 
         docker run -p 3000:3000 restaurant-locater
 
