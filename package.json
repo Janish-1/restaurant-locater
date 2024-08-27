@@ -1,0 +1,11 @@
+{
+  "name": "restaurant-locater",
+  "version": "1.0.0",
+  "description": "A Restaurant Locater using gps coordinates to show restaurants in the vicinity.",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "Janish Pancholi",
+  "license": "ISC"
+}
