@@ -1,29 +1,31 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const connectDB = require("./config/config"); // Import database configuration
-const morgan = require("morgan"); // Import morgan for logging
+const connectDB = require("./config/config");
+const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
+const dotenv = require("dotenv");
+const authRoutes = require("./routes/authRoutes");
+const restaurantRoutes = require("./routes/restaurantRoutes"); // Import restaurant routes
 
-const PORT = 3001;
+dotenv.config();
+
+const PORT = process.env.PORT || 3001;
 const app = express();
 
-// Create a write stream (in append mode) for the log file
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, "access.log"),
   { flags: "a" }
 );
 
-// Use morgan for logging with combined format
 app.use(morgan("combined", { stream: accessLogStream }));
-
 app.use(bodyParser.json());
 
-// Connect to MongoDB
-connectDB(); // Call the function to establish MongoDB connection
+connectDB();
 
-// Start the server
+app.use("/api/auth", authRoutes);
+app.use("/api/restaurants", restaurantRoutes); // Use restaurant routes
+
 app.listen(PORT, () => {
-    console.log(`Server Status: OK`);
-  });
-  
+  console.log(`Server running on port ${PORT}`);
+});
