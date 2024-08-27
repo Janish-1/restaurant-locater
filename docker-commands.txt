@@ -1,0 +1,5 @@
+docker build -t restaurant-locater .
+docker run -p 3000:3000 restaurant-locater
+docker login
+docker tag restaurant-locater janishpancholidocker/restaurant-locater
+docker push janishpancholidocker/restaurant-locater
