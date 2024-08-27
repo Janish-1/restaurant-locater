@@ -34,13 +34,4 @@ const login = async (req, res) => {
     }
 };
 
-const renewToken = (req, res) => {
-    try {
-        const token = generateToken(req.user);
-        res.status(200).json({ token });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-module.exports = { register, login, renewToken };
+module.exports = { register, login };

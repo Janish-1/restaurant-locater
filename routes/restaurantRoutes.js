@@ -7,21 +7,13 @@ const {
   updateRestaurant,
   deleteRestaurant,
 } = require("../controllers/restaurantController");
-const auth = require("../middleware/authMiddleware"); // Middleware for user authentication
+const { protect } = require("../middleware/authMiddleware");
 
-// Create a new restaurant
-router.post("/", auth, createRestaurant);
-
-// Get restaurants within a specified radius
-router.post("/radius", auth, getRestaurantsByRadius);
-
-// Get restaurants within a specified distance range
-router.post("/distance-range", auth, getRestaurantsByDistanceRange);
-
-// Update a restaurant
-router.put("/:id", auth, updateRestaurant);
-
-// Delete a restaurant
-router.delete("/:id", auth, deleteRestaurant);
+// Apply middleware to protect routes
+router.post("/", protect, createRestaurant);
+router.post("/radius", protect, getRestaurantsByRadius);
+router.post("/distance-range", protect, getRestaurantsByDistanceRange);
+router.put("/:id", protect, updateRestaurant);
+router.delete("/:id", protect, deleteRestaurant);
 
 module.exports = router;

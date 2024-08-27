@@ -1,7 +1,7 @@
 const Restaurant = require("../models/Restaurant");
 
 // Create a new restaurant
-exports.createRestaurant = async (req, res) => {
+const createRestaurant = async (req, res) => {
   try {
     const { name, description, latitude, longitude } = req.body;
 
@@ -22,7 +22,7 @@ exports.createRestaurant = async (req, res) => {
 };
 
 // Get restaurants by location within a specified radius
-exports.getRestaurantsByRadius = async (req, res) => {
+const getRestaurantsByRadius = async (req, res) => {
   try {
     const { latitude, longitude, radius } = req.body;
 
@@ -41,7 +41,7 @@ exports.getRestaurantsByRadius = async (req, res) => {
 };
 
 // Get restaurants by location within a specified distance range
-exports.getRestaurantsByDistanceRange = async (req, res) => {
+const getRestaurantsByDistanceRange = async (req, res) => {
   try {
     const { latitude, longitude, minimumDistance, maximumDistance } = req.body;
 
@@ -65,7 +65,7 @@ exports.getRestaurantsByDistanceRange = async (req, res) => {
 };
 
 // Update a restaurant
-exports.updateRestaurant = async (req, res) => {
+const updateRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
     const updateData = req.body;
@@ -87,7 +87,7 @@ exports.updateRestaurant = async (req, res) => {
 };
 
 // Delete a restaurant
-exports.deleteRestaurant = async (req, res) => {
+const deleteRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
 
@@ -102,3 +102,5 @@ exports.deleteRestaurant = async (req, res) => {
     res.status(500).json({ message: "Error deleting restaurant", error });
   }
 };
+
+module.exports = { createRestaurant, getRestaurantsByDistanceRange, getRestaurantsByRadius, updateRestaurant, deleteRestaurant};
